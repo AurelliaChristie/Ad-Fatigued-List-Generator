@@ -73,7 +73,7 @@ for country in unique.country_code.unique():
 
 # Streamlit
 # Title
-col1, mid, col2 = st.columns([1, 1, 20])
+col1, mid, col2 = st.columns([5, 1, 16])
 with col1:
     st.image('zoomd-logo.png', width=120)
 with col2:
