@@ -12,6 +12,15 @@ import pandas as pd
 # To scale the data
 from sklearn.preprocessing import MinMaxScaler
 
+# Set theme
+EXPANDER_TEXT = """
+    ```python
+    [theme]
+    base = "dark"
+    primaryColor = "blue"
+    ```
+"""
+
 # Create connection object
 fs = s3fs.S3FileSystem(anon=False)
 
