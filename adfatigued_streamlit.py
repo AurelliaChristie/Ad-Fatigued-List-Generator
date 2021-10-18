@@ -16,13 +16,16 @@ from sklearn.preprocessing import MinMaxScaler
 fs = s3fs.S3FileSystem(anon=False)
 
 # Retrieve file contents
+
+
 @st.cache
 def read_file(date):
     with fs.open(f's3://zmd-bidder-data/adfatigued/zoomd-events-{date}') as f:
         return pd.read_csv(f)
 
+
 df = pd.DataFrame()
-for i in range(11,14):
+for i in range(11, 14):
     read_df = read_file(f'2021-10-{i}.csv')
     df = df.append(read_df)
 df = df.reset_index(drop=True)
@@ -70,7 +73,11 @@ for country in unique.country_code.unique():
 
 # Streamlit
 # Title
-st.title("Ad-Fatigued List Generator")
+col1, mid, col2 = st.beta_columns([1, 1, 20])
+with col1:
+    st.image('zoomd-logo.png', width=120)
+with col2:
+    st.title("Ad-Fatigued List Generator")
 st.write("Using zoomd-events-2021-10-11 - zoomd-events-2021-10-13 based on Country Code & Partner ID")
 st.write("NB : Threshold represents the minimum of how many times a given user received the ad compared to the range of ads received by users in his group to be classified as an ad-fatigued user. The higher the threshold means the more frequently the users in the list received the ads compared to their own group.")
 
