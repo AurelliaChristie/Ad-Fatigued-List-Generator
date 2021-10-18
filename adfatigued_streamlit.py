@@ -73,9 +73,9 @@ for country in unique.country_code.unique():
 
 # Streamlit
 # Title
-col1, mid, col2 = st.columns([5, 1, 16])
+col1, mid, col2 = st.columns([3, 1, 18])
 with col1:
-    st.image('zoomd-logo.png', width=120)
+    st.image('zoomd-logo.png')
 with col2:
     st.title("Ad-Fatigued List Generator")
 st.write("Using zoomd-events-2021-10-11 - zoomd-events-2021-10-13 based on Country Code & Partner ID")
