@@ -66,6 +66,14 @@ def trigger():
         mime='text/csv'
     )
         
+# Streamlit
+# Title
+col1, mid, col2 = st.columns([3, 1, 18])
+with col1:
+    st.image('zoomd-logo.png')
+with col2:
+    st.title("Ad-Fatigued List Generator")
+st.write("Using zoomd-impressions-####-##-##.csv, locate DSP_BID_ID based on Country ID & Campaign Name.")
 
 # Date input
 with st.form(key="datetime"):
