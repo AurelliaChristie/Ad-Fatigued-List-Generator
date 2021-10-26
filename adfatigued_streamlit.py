@@ -38,7 +38,7 @@ def trigger():
             df_scaled_ind.loc[:, ('scale')] = scaler.fit_transform(
                 df_scaled_ind[['count']])
             df_scaled = df_scaled.append(df_scaled_ind)
-    st.write(df_scaled.head())
+    st.write(df_scaled_ind.head())
     # # Result based on slider
     # result = df_scaled[df_scaled.scale > st.session_state.threshold]
     # # Remove duplicate DSP_BID_ID
