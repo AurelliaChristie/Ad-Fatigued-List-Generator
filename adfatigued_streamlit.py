@@ -19,7 +19,7 @@ fs = s3fs.S3FileSystem(anon=False)
 # Retrieve file contents
 @st.cache
 def read_file(date):
-    with fs.open(f's3://zmd-bidder-data/zoomd-impressiosns-{date}.csv') as f:
+    with fs.open(f's3://zmd-bidder-data/adfatigued/zoomd-impressions-{date}.csv') as f:
         return pd.read_csv(f)
 
 # Find result
