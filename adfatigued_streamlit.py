@@ -38,13 +38,14 @@ def trigger():
             df_scaled_ind.loc[:, ('scale')] = scaler.fit_transform(
                 df_scaled_ind[['count']])
             df_scaled = df_scaled.append(df_scaled_ind)
-    # Result based on slider
-    result = df_scaled[df_scaled.scale > st.session_state.threshold]
-    # Remove duplicate DSP_BID_ID
-    result = result.drop_duplicates(subset='DSP_BID_ID')
-    # Clean result
-    result = result[['DSP_BID_ID','USER_COUNTRY_ID','CAMPAIGN_NAME']]
-    result = result.set_index('DSP_BID_ID')
+    st.write(df_scaled)
+    # # Result based on slider
+    # result = df_scaled[df_scaled.scale > st.session_state.threshold]
+    # # Remove duplicate DSP_BID_ID
+    # result = result.drop_duplicates(subset='DSP_BID_ID')
+    # # Clean result
+    # result = result[['DSP_BID_ID','USER_COUNTRY_ID','CAMPAIGN_NAME']]
+    # result = result.set_index('DSP_BID_ID')
 
     # Conver result to csv
 
