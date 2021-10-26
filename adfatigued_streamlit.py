@@ -24,48 +24,47 @@ def read_file(date):
 
 # Find result
 def trigger():
-    st.write(st.session_state.countries)
-    # # Group the `DSP_BID_ID` by `USER_COUNTRY_ID` & `CAMPAIGN_NAME` then count it
-    # df_group = pd.DataFrame(df.groupby(by=['DSP_BID_ID','USER_COUNTRY_ID','CAMPAIGN_NAME']).size().to_frame("count"))
-    # # Reset index
-    # df_group = df_group.reset_index()
-    # # Scale the count counted in the first step
-    # df_scaled = pd.DataFrame()
-    # scaler = MinMaxScaler()
-    # for country in st.session_state.countries:
-    #     for campaign in df_group[df_group.USER_COUNTRY_ID == country].CAMPAIGN_NAME.unique():
-    #         df_scaled_ind = df_group.loc[((df_group.USER_COUNTRY_ID  == country) & (
-    #             df_group.CAMPAIGN_NAME == campaign))].copy()
-    #         df_scaled_ind.loc[:, ('scale')] = scaler.fit_transform(
-    #             df_scaled_ind[['count']])
-    #         df_scaled = df_scaled.append(df_scaled_ind)
-    # # Result based on slider
-    # result = df_scaled[df_scaled.scale > st.session_state.threshold]
-    # # Remove duplicate DSP_BID_ID
-    # result = result.drop_duplicates(subset='DSP_BID_ID')
-    # # Clean result
-    # result = result[['DSP_BID_ID','USER_COUNTRY_ID','CAMPAIGN_NAME']]
-    # result = result.set_index('DSP_BID_ID')
+    # Group the `DSP_BID_ID` by `USER_COUNTRY_ID` & `CAMPAIGN_NAME` then count it
+    df_group = pd.DataFrame(df.groupby(by=['DSP_BID_ID','USER_COUNTRY_ID','CAMPAIGN_NAME']).size().to_frame("count"))
+    # Reset index
+    df_group = df_group.reset_index()
+    # Scale the count counted in the first step
+    df_scaled = pd.DataFrame()
+    scaler = MinMaxScaler()
+    for country in st.session_state.countries:
+        for campaign in df_group[df_group.USER_COUNTRY_ID == str(country)].CAMPAIGN_NAME.unique():
+            df_scaled_ind = df_group.loc[((df_group.USER_COUNTRY_ID  == str(country)) & (
+                df_group.CAMPAIGN_NAME == campaign))].copy()
+            df_scaled_ind.loc[:, ('scale')] = scaler.fit_transform(
+                df_scaled_ind[['count']])
+            df_scaled = df_scaled.append(df_scaled_ind)
+    # Result based on slider
+    result = df_scaled[df_scaled.scale > st.session_state.threshold]
+    # Remove duplicate DSP_BID_ID
+    result = result.drop_duplicates(subset='DSP_BID_ID')
+    # Clean result
+    result = result[['DSP_BID_ID','USER_COUNTRY_ID','CAMPAIGN_NAME']]
+    result = result.set_index('DSP_BID_ID')
 
-    # # Conver result to csv
-
-
-    # @st.cache
-    # def convert_df(df):
-    #     return df.to_csv().encode('utf-8')
+    # Conver result to csv
 
 
-    # csv = convert_df(result)
+    @st.cache
+    def convert_df(df):
+        return df.to_csv().encode('utf-8')
 
-    # st.write(
-    #         f'Ad Fatigued User List with Threshold of {st.session_state.threshold} ({result.shape[0]} users)')
-    # st.write(result)
-    # st.download_button(
-    #     label="Download as CSV",
-    #     data=csv,
-    #     file_name=f"ad_fatigued_{st.session_state.threshold}.csv",
-    #     mime='text/csv'
-    # )
+
+    csv = convert_df(result)
+
+    st.write(
+            f'Ad Fatigued User List with Threshold of {st.session_state.threshold} ({result.shape[0]} users)')
+    st.write(result)
+    st.download_button(
+        label="Download as CSV",
+        data=csv,
+        file_name=f"ad_fatigued_{st.session_state.threshold}.csv",
+        mime='text/csv'
+    )
         
 # Streamlit
 # Title
@@ -78,7 +77,7 @@ st.write("Using zoomd-impressions-####-##-##.csv, locate DSP_BID_ID based on Cou
 
 # Date input
 with st.form(key="datetime"):
-    date_input = st.date_input("Date Range", value=(date.today()-timedelta(days=7), date.today()-timedelta(days=1)), max_value=date.today()-timedelta(days=1))
+    date_input = st.date_input("Date Range", value=(date.today()-timedelta(days=7), date.today()-timedelta(days=2)), max_value=date.today()-timedelta(days=2))
     submit = st.form_submit_button()
     
 # Read files based on date input
