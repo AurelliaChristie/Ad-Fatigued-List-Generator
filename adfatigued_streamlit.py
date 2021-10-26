@@ -32,40 +32,39 @@ def trigger():
     df_scaled = pd.DataFrame()
     scaler = MinMaxScaler()
     for country in st.session_state.countries:
-        st.write(country)
-    #     for campaign in df_group[df_group.USER_COUNTRY_ID == str(country)].CAMPAIGN_NAME.unique():
-    #         df_scaled_ind = df_group.loc[((df_group.USER_COUNTRY_ID  == str(country)) & (
-    #             df_group.CAMPAIGN_NAME == campaign))].copy()
-    #         df_scaled_ind.loc[:, ('scale')] = scaler.fit_transform(
-    #             df_scaled_ind[['count']])
-    #         df_scaled = df_scaled.append(df_scaled_ind)
-    # # Result based on slider
-    # result = df_scaled[df_scaled.scale > st.session_state.threshold]
-    # # Remove duplicate DSP_BID_ID
-    # result = result.drop_duplicates(subset='DSP_BID_ID')
-    # # Clean result
-    # result = result[['DSP_BID_ID','USER_COUNTRY_ID','CAMPAIGN_NAME']]
-    # result = result.set_index('DSP_BID_ID')
+        for campaign in df_group[df_group.USER_COUNTRY_ID == str(country)].CAMPAIGN_NAME.unique():
+            df_scaled_ind = df_group.loc[((df_group.USER_COUNTRY_ID  == str(country)) & (
+                df_group.CAMPAIGN_NAME == campaign))].copy()
+            df_scaled_ind.loc[:, ('scale')] = scaler.fit_transform(
+                df_scaled_ind[['count']])
+            df_scaled = df_scaled.append(df_scaled_ind)
+    # Result based on slider
+    result = df_scaled[df_scaled.scale > st.session_state.threshold]
+    # Remove duplicate DSP_BID_ID
+    result = result.drop_duplicates(subset='DSP_BID_ID')
+    # Clean result
+    result = result[['DSP_BID_ID','USER_COUNTRY_ID','CAMPAIGN_NAME']]
+    result = result.set_index('DSP_BID_ID')
 
-    # # Conver result to csv
-
-
-    # @st.cache
-    # def convert_df(df):
-    #     return df.to_csv().encode('utf-8')
+    # Conver result to csv
 
 
-    # csv = convert_df(result)
+    @st.cache
+    def convert_df(df):
+        return df.to_csv().encode('utf-8')
 
-    # st.write(
-    #         f'Ad Fatigued User List with Threshold of {st.session_state.threshold} ({result.shape[0]} users)')
-    # st.write(result)
-    # st.download_button(
-    #     label="Download as CSV",
-    #     data=csv,
-    #     file_name=f"ad_fatigued_{st.session_state.threshold}.csv",
-    #     mime='text/csv'
-    # )
+
+    csv = convert_df(result)
+
+    st.write(
+            f'Ad Fatigued User List with Threshold of {st.session_state.threshold} ({result.shape[0]} users)')
+    st.write(result)
+    st.download_button(
+        label="Download as CSV",
+        data=csv,
+        file_name=f"ad_fatigued_{st.session_state.threshold}.csv",
+        mime='text/csv'
+    )
         
 # Streamlit
 # Title
@@ -95,5 +94,5 @@ if submit:
     with st.form(key="slider"):
         st.slider('Threshold', min_value=0.0,
                             max_value=1.0, value=0.8, step=0.1, key="threshold")
-        st.selectbox('Country ID', df.USER_COUNTRY_ID.unique(), key="countries")
+        st.multiselect('Country ID', df.USER_COUNTRY_ID.unique(), key="countries")
         st.form_submit_button("Submit", on_click=trigger)
