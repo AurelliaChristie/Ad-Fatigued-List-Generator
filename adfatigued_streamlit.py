@@ -38,7 +38,7 @@ def trigger():
             df_scaled_ind.loc[:, ('scale')] = scaler.fit_transform(
                 df_scaled_ind[['count']])
             df_scaled = df_scaled.append(df_scaled_ind)
-    st.write(df_scaled)
+    st.write(df_scaled.head())
     # # Result based on slider
     # result = df_scaled[df_scaled.scale > st.session_state.threshold]
     # # Remove duplicate DSP_BID_ID
@@ -50,22 +50,22 @@ def trigger():
     # Conver result to csv
 
 
-    @st.cache
-    def convert_df(df):
-        return df.to_csv().encode('utf-8')
+    # @st.cache
+    # def convert_df(df):
+    #     return df.to_csv().encode('utf-8')
 
 
-    csv = convert_df(result)
+    # csv = convert_df(result)
 
-    st.write(
-            f'Ad Fatigued User List with Threshold of {st.session_state.threshold} ({result.shape[0]} users)')
-    st.write(result)
-    st.download_button(
-        label="Download as CSV",
-        data=csv,
-        file_name=f"ad_fatigued_{st.session_state.threshold}.csv",
-        mime='text/csv'
-    )
+    # st.write(
+    #         f'Ad Fatigued User List with Threshold of {st.session_state.threshold} ({result.shape[0]} users)')
+    # st.write(result)
+    # st.download_button(
+    #     label="Download as CSV",
+    #     data=csv,
+    #     file_name=f"ad_fatigued_{st.session_state.threshold}.csv",
+    #     mime='text/csv'
+    # )
         
 # Streamlit
 # Title
