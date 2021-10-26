@@ -32,40 +32,40 @@ def trigger():
     df_scaled = pd.DataFrame()
     scaler = MinMaxScaler()
     for country in st.session_state.countries:
-        for campaign in df_group[df_group.USER_COUNTRY_ID == str(country)].CAMPAIGN_NAME.unique():
-            df_scaled_ind = df_group.loc[((df_group.USER_COUNTRY_ID  == str(country)) & (
+        for campaign in df_group[df_group.USER_COUNTRY_ID == country].CAMPAIGN_NAME.unique():
+            df_scaled_ind = df_group.loc[((df_group.USER_COUNTRY_ID  == country) & (
                 df_group.CAMPAIGN_NAME == campaign))].copy()
             df_scaled_ind.loc[:, ('scale')] = scaler.fit_transform(
                 df_scaled_ind[['count']])
             df_scaled = df_scaled.append(df_scaled_ind)
-    st.write(df_scaled_ind.head())
-    # # Result based on slider
-    # result = df_scaled[df_scaled.scale > st.session_state.threshold]
-    # # Remove duplicate DSP_BID_ID
-    # result = result.drop_duplicates(subset='DSP_BID_ID')
-    # # Clean result
-    # result = result[['DSP_BID_ID','USER_COUNTRY_ID','CAMPAIGN_NAME']]
-    # result = result.set_index('DSP_BID_ID')
+
+    # Result based on slider
+    result = df_scaled[df_scaled.scale > st.session_state.threshold]
+    # Remove duplicate DSP_BID_ID
+    result = result.drop_duplicates(subset='DSP_BID_ID')
+    # Clean result
+    result = result[['DSP_BID_ID','USER_COUNTRY_ID','CAMPAIGN_NAME']]
+    result = result.set_index('DSP_BID_ID')
 
     # Conver result to csv
 
 
-    # @st.cache
-    # def convert_df(df):
-    #     return df.to_csv().encode('utf-8')
+    @st.cache
+    def convert_df(df):
+        return df.to_csv().encode('utf-8')
 
 
-    # csv = convert_df(result)
+    csv = convert_df(result)
 
-    # st.write(
-    #         f'Ad Fatigued User List with Threshold of {st.session_state.threshold} ({result.shape[0]} users)')
-    # st.write(result)
-    # st.download_button(
-    #     label="Download as CSV",
-    #     data=csv,
-    #     file_name=f"ad_fatigued_{st.session_state.threshold}.csv",
-    #     mime='text/csv'
-    # )
+    st.write(
+            f'Ad Fatigued User List with Threshold of {st.session_state.threshold} ({result.shape[0]} users)')
+    st.write(result)
+    st.download_button(
+        label="Download as CSV",
+        data=csv,
+        file_name=f"ad_fatigued_{st.session_state.threshold}.csv",
+        mime='text/csv'
+    )
         
 # Streamlit
 # Title
